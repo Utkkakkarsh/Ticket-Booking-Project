@@ -1,38 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaArrowRight, FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import EventPoster from './EventPoster';
 
 const EventCard = ({ event }) => {
+  const eventDate = event.date ? new Date(event.date).toLocaleDateString(undefined, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }) : 'Date TBA';
+
   return (
-    <div className="card event-card h-100">
-      <img 
-        src={event.posterUrl || 'https://via.placeholder.com/400x200?text=Event+Poster'} 
-        className="card-img-top event-poster" 
-        alt={event.title} 
-      />
-      <div className="card-body d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-start mb-2">
-          <h5 className="card-title mb-0">{event.title}</h5>
-          <span className={`badge ${event.type === 'Movie' ? 'badge-standard' : 'badge-premium'}`}>
-            {event.type}
+    <article className="card event-card h-100">
+      <div className="event-poster-wrap">
+        <EventPoster event={event} className="event-poster" fallbackClassName="event-poster-card-fallback" />
+        <span className={`badge event-card-type ${event.type === 'Movie' ? 'badge-standard' : 'badge-premium'}`}>
+          {event.type || 'Event'}
+        </span>
+      </div>
+
+      <div className="event-card-body">
+        <h3 className="event-card-title">{event.title}</h3>
+
+        <div className="event-card-meta">
+          <FaCalendarAlt size={13} aria-hidden="true" />
+          <span><strong>{eventDate}</strong> · {event.startTime || 'Time TBA'}</span>
+        </div>
+
+        <div className="event-card-meta">
+          <FaMapMarkerAlt size={14} aria-hidden="true" />
+          <span>
+            <strong>{event.venue?.name || 'Venue TBA'}</strong>
+            {event.distanceKm !== null && event.distanceKm !== undefined && ` · ${event.distanceKm} km away`}
           </span>
         </div>
-        <p className="card-text text-muted small mb-2">
-          {event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'} at {event.startTime || 'Time TBA'}
-        </p>
-        <p className="card-text small mb-3">
-          <strong>Venue:</strong> {event.venue?.name || 'TBA'}
-          {event.distanceKm !== null && event.distanceKm !== undefined && <span className="text-muted d-block mt-1"><i className="bi bi-geo-alt me-1"></i>{event.distanceKm} km away</span>}
-        </p>
-        <div className="mt-auto">
-          <p className="text-primary fw-bold mb-2">
-            Starting from ₹{Number(event.basePrice || 0).toFixed(2)}
-          </p>
-          <Link to={`/events/${event._id}`} className="btn btn-outline-primary w-100">
-            View Details
+
+        <div className="event-card-footer">
+          <div>
+            <span className="event-card-price-label">Tickets from</span>
+            <span className="event-card-price">₹{Number(event.basePrice || 0).toFixed(2)}</span>
+          </div>
+          <Link to={`/events/${event._id}`} className="event-card-link" aria-label={`View ${event.title || 'event'} details`}>
+            <FaArrowRight size={15} aria-hidden="true" />
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Spinner from '../components/Spinner';
+import EventPoster from '../components/EventPoster';
 import { toast } from 'react-toastify';
 
 const getEventStart = (event) => {
@@ -56,7 +57,7 @@ const EventDetailPage = () => {
   return (
     <div className="container py-5">
       <div className="row g-5">
-        <div className="col-md-4"><img src={event.posterUrl || 'https://via.placeholder.com/400x600?text=No+Poster'} alt={event.title} className="img-fluid rounded shadow w-100" style={{ objectFit: 'cover' }} /></div>
+        <div className="col-md-4"><div className="event-detail-poster-wrap"><EventPoster event={event} className="event-detail-poster" fallbackClassName="event-detail-poster-fallback" /></div></div>
         <div className="col-md-8">
           <div className="d-flex align-items-center mb-2"><span className={`badge ${status === 'upcoming' || status === 'published' ? 'bg-primary' : 'bg-secondary'} me-2 fs-6`}>{event.type}</span><span className={`badge ${canBook ? 'bg-info' : 'bg-secondary'} fs-6`}>{status}</span></div>
           <h1 className="display-4 fw-bold mb-3">{event.title}</h1>
