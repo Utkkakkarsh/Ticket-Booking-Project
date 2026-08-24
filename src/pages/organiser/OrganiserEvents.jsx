@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaCalendarAlt, FaPen, FaPlus, FaTrash, FaUsers } from 'react-icons/fa';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 import { toast } from 'react-toastify';
@@ -38,59 +39,73 @@ const OrganiserEvents = () => {
   if (loading) return <div className="mt-5"><Spinner /></div>;
 
   return (
-    <div className="container py-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">My Events</h2>
-        <Link to="/organiser/events/create" className="btn btn-primary fw-bold rounded-pill px-4 shadow-sm">
-          <i className="bi bi-plus-lg me-2"></i> Create New Event
+    <div className="container py-4 py-md-5 organiser-events-page">
+      <div className="d-flex justify-content-between align-items-md-end align-items-start mb-4 flex-wrap gap-3">
+        <div>
+          <p className="section-kicker mb-2">Event management</p>
+          <h2 className="section-title">My events</h2>
+          <p className="section-description">Manage event details, bookings, and schedules from one place.</p>
+        </div>
+        <Link to="/organiser/events/create" className="btn btn-primary organiser-create-button">
+          <FaPlus size={13} /> Create event
         </Link>
       </div>
 
-      <div className="card shadow-sm border-0 rounded-4 overflow-hidden">
+      <div className="card organiser-events-card">
         <div className="table-responsive">
-          <table className="table table-hover align-middle mb-0">
-            <thead className="table-light">
+          <table className="table table-hover align-middle mb-0 organiser-events-table">
+            <thead>
               <tr>
-                <th className="py-3 px-4">Event Title</th>
+                <th>Event</th>
                 <th>Type</th>
-                <th>Date & Time</th>
+                <th>Date &amp; time</th>
                 <th>Venue</th>
                 <th>Status</th>
-                <th className="text-end px-4">Actions</th>
+                <th className="text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
               {events.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-5 text-muted">You haven't created any events yet.</td>
+                  <td colSpan="6" className="text-center py-5 text-muted">You have not created any events yet.</td>
                 </tr>
               ) : (
-                events.map(event => (
+                events.map((event) => (
                   <tr key={event._id}>
-                    <td className="fw-semibold px-4">{event.title}</td>
-                    <td><span className="badge bg-secondary">{event.type}</span></td>
                     <td>
-                      <div className="small">
-                        <div className="fw-bold">{new Date(event.date).toLocaleDateString()}</div>
-                        <div className="text-muted">{event.startTime}</div>
+                      <div className="organiser-event-title">{event.title}</div>
+                    </td>
+                    <td><span className="badge badge-standard">{event.type}</span></td>
+                    <td>
+                      <div className="organiser-event-date">
+                        <FaCalendarAlt size={12} aria-hidden="true" />
+                        <span>
+                          <strong>{new Date(event.date).toLocaleDateString()}</strong>
+                          <small>{event.startTime}</small>
+                        </span>
                       </div>
                     </td>
                     <td>{event.venue?.name || 'Unknown'}</td>
                     <td>
-                      <span className={`badge ${event.status === 'PUBLISHED' ? 'bg-success' : 'bg-warning text-dark'}`}>
+                      <span className={`organiser-status status-${String(event.status || '').toLowerCase()}`}>
                         {event.status}
                       </span>
                     </td>
-                    <td className="text-end px-4">
-                      <Link to={`/organiser/events/${event._id}/bookings`} className="btn btn-sm btn-outline-info me-2" title="View Bookings">
-                        <i className="bi bi-people"></i>
-                      </Link>
-                      <Link to={`/organiser/events/${event._id}/edit`} className="btn btn-sm btn-outline-primary me-2" title="Edit or reschedule">
-                        <i className="bi bi-pencil"></i>
-                      </Link>
-                      <button onClick={() => handleDelete(event._id)} className="btn btn-sm btn-outline-danger" title="Delete">
-                        <i className="bi bi-trash"></i>
-                      </button>
+                    <td>
+                      <div className="event-action-group justify-content-end">
+                        <Link to={`/organiser/events/${event._id}/bookings`} className="event-action-button event-action-bookings" title="View bookings">
+                          <FaUsers size={13} />
+                          <span>Bookings</span>
+                        </Link>
+                        <Link to={`/organiser/events/edit/${event._id}`} className="event-action-button event-action-edit" title="Edit or reschedule">
+                          <FaPen size={12} />
+                          <span>Edit</span>
+                        </Link>
+                        <button type="button" onClick={() => handleDelete(event._id)} className="event-action-button event-action-delete" title="Delete event">
+                          <FaTrash size={12} />
+                          <span>Delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaShieldAlt, FaTicketAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
@@ -12,7 +13,6 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = location.state?.from || null;
 
   const handleSubmit = async (e) => {
@@ -43,143 +43,90 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        padding: '2rem 1rem',
-      }}
-    >
-      <div
-        className="card border-0 shadow-lg"
-        style={{
-          maxWidth: '420px',
-          width: '100%',
-          borderRadius: '20px',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: '2rem 2.5rem 3rem',
-            textAlign: 'center',
-            color: '#fff',
-          }}
-        >
-          <div
-            style={{
-              width: '64px',
-              height: '64px',
-              margin: '0 auto 1rem',
-              borderRadius: '50%',
-              background: 'rgba(255,255,255,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.75rem',
-            }}
-          >
-            🔒
+    <section className="auth-page">
+      <div className="auth-shell">
+        <aside className="auth-aside">
+          <div>
+            <div className="auth-brand-line">
+              <span className="brand-mark"><FaTicketAlt /></span>
+              <span>TicketBook</span>
+            </div>
+            <p className="auth-kicker">WELCOME BACK</p>
+            <h1>More moments are waiting for you.</h1>
+            <p>Sign in to manage your tickets, pick up where you left off, and make your next plan feel effortless.</p>
           </div>
-          <h2 className="fw-bold mb-1">Welcome Back</h2>
-          <p className="mb-0" style={{ opacity: 0.85 }}>
-            Sign in to continue to your account
-          </p>
-        </div>
+          <div className="auth-aside-note">
+            <FaShieldAlt size={13} /> SECURE ACCOUNT ACCESS
+          </div>
+        </aside>
 
-        <div
-          className="card-body bg-white p-4 p-md-5"
-          style={{ marginTop: '-1.5rem', borderRadius: '20px 20px 0 0' }}
-        >
+        <div className="auth-panel">
+          <h2 className="auth-panel-heading">Sign in</h2>
+          <p className="auth-panel-copy">Enter your details to continue to your account.</p>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label text-secondary fw-semibold small text-uppercase" style={{ letterSpacing: '0.03em' }}>
-                Email Address
-              </label>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  ✉️
-                </span>
+              <label className="form-label auth-label" htmlFor="login-email">Email address</label>
+              <div className="input-group auth-input-group">
+                <span className="input-group-text"><FaEnvelope size={14} /></span>
                 <input
+                  id="login-email"
                   type="email"
-                  className="form-control form-control-lg border-start-0 bg-light"
+                  className="form-control"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
+                  autoComplete="email"
                   required
                 />
               </div>
             </div>
 
             <div className="mb-2">
-              <label className="form-label text-secondary fw-semibold small text-uppercase" style={{ letterSpacing: '0.03em' }}>
-                Password
-              </label>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  🔑
-                </span>
+              <label className="form-label auth-label" htmlFor="login-password">Password</label>
+              <div className="input-group auth-input-group">
+                <span className="input-group-text"><FaLock size={14} /></span>
                 <input
+                  id="login-password"
                   type={showPassword ? 'text' : 'password'}
-                  className="form-control form-control-lg border-start-0 border-end-0 bg-light"
+                  className="form-control"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
                   required
                 />
                 <button
                   type="button"
-                  className="input-group-text bg-light border-start-0"
+                  className="input-group-text"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  tabIndex={-1}
-                  style={{ cursor: 'pointer' }}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
                 </button>
               </div>
             </div>
 
             <div className="text-end mb-4">
-              <Link to="/forgot-password" className="small text-decoration-none text-primary fw-semibold">
-                Forgot password?
-              </Link>
+              <Link to="/forgot-password" className="auth-subtle-link small">Forgot password?</Link>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-lg w-100 fw-bold text-white shadow-sm"
-              disabled={loading}
-              style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none',
-                borderRadius: '12px',
-                padding: '0.75rem',
-              }}
-            >
+            <button type="submit" className="btn btn-primary auth-submit" disabled={loading}>
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm me-2" role="status" />
-                  Signing in...
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                  Signing in…
                 </>
-              ) : (
-                'Sign In'
-              )}
+              ) : 'Sign in'}
             </button>
           </form>
 
-          <div className="mt-4 text-center">
-            <p className="mb-0 text-muted">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-primary fw-bold text-decoration-none">
-                Register here
-              </Link>
-            </p>
-          </div>
+          <p className="mt-4 mb-0 text-center text-muted small">
+            New to TicketBook? <Link to="/register" className="auth-subtle-link">Create an account</Link>
+          </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

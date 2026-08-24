@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaArrowRight, FaCompass, FaTicketAlt } from 'react-icons/fa';
 import api from '../services/api';
 import EventCard from '../components/EventCard';
 import Spinner from '../components/Spinner';
@@ -24,75 +25,50 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="home-page" style={{ background: '#f7f8fc', minHeight: '100vh' }}>
-      <div
-        className="text-white text-center position-relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '5.5rem 1.5rem 7rem',
-        }}
-      >
-        {/* decorative blobs */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-60px',
-            left: '-60px',
-            width: '220px',
-            height: '220px',
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.08)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-80px',
-            right: '-40px',
-            width: '260px',
-            height: '260px',
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.08)',
-          }}
-        />
-
-        <div className="position-relative">
-          <span
-            className="badge rounded-pill px-3 py-2 mb-3"
-            style={{ background: 'rgba(255,255,255,0.15)', fontWeight: 600, letterSpacing: '0.03em' }}
-          >
-            🎟️ NOW BOOKING
-          </span>
-          <h1 className="display-4 fw-bold mb-3">Book Your Experience</h1>
-          <p className="lead mb-4" style={{ opacity: 0.9, maxWidth: '560px', margin: '0 auto' }}>
-            Find and book the best movies, concerts, and events near you.
-          </p>
-          <Link
-            to="/events"
-            className="btn btn-lg px-5 rounded-pill fw-bold shadow"
-            style={{ background: '#fff', color: '#667eea', border: 'none' }}
-          >
-            Explore Now
-          </Link>
-        </div>
-      </div>
-
-      <div className="container" style={{ marginTop: '-3.5rem', paddingBottom: '4rem' }}>
-        <div
-          className="bg-white rounded-4 shadow-sm p-4 p-md-5"
-          style={{ border: '1px solid #eee' }}
-        >
-          <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <div>
-              <h2 className="fw-bold mb-1">Featured Events</h2>
-              <p className="text-muted mb-0 small">Hand-picked events you shouldn't miss</p>
+    <div className="home-page">
+      <section className="home-hero">
+        <div className="container">
+          <div className="hero-grid">
+            <div className="hero-content">
+              <div className="hero-eyebrow">
+                <span className="hero-eyebrow-dot" />
+                FIND WHAT MOVES YOU
+              </div>
+              <h1 className="hero-title">
+                Your next great <em>night out</em> starts here.
+              </h1>
+              <p className="hero-copy">
+                Discover memorable movies, concerts, and live events — then secure your seat in just a few simple steps.
+              </p>
+              <div className="hero-actions">
+                <Link to="/events" className="btn btn-hero-primary">
+                  Explore events <FaArrowRight size={14} />
+                </Link>
+                <Link to="/events" className="btn btn-hero-secondary">
+                  <FaCompass size={14} /> Browse by interest
+                </Link>
+              </div>
             </div>
-            <Link
-              to="/events"
-              className="btn fw-semibold rounded-pill px-4"
-              style={{ border: '1.5px solid #667eea', color: '#667eea', background: 'transparent' }}
-            >
-              View All Events →
+            <div className="hero-stamp" aria-label="Book your next experience">
+              <div>
+                <strong>01</strong>
+                <span>choose • book • go</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container home-content">
+        <div className="featured-panel">
+          <div className="d-flex justify-content-between align-items-end mb-4 mb-md-5 flex-wrap gap-3">
+            <div>
+              <p className="section-kicker">Curated for your calendar</p>
+              <h2 className="section-title">Featured events</h2>
+              <p className="section-description">Fresh picks, ready when you are.</p>
+            </div>
+            <Link to="/events" className="btn btn-outline-primary">
+              See all events <FaArrowRight size={13} />
             </Link>
           </div>
 
@@ -101,12 +77,10 @@ const HomePage = () => {
               <Spinner />
             </div>
           ) : events.length === 0 ? (
-            <div
-              className="text-center py-5 rounded-4"
-              style={{ background: '#f7f8fc', border: '1px dashed #ddd' }}
-            >
-              <div style={{ fontSize: '2.5rem' }} className="mb-2">📭</div>
-              <h5 className="text-muted fw-semibold mb-0">No featured events available right now.</h5>
+            <div className="empty-events">
+              <div className="empty-events-icon"><FaTicketAlt /></div>
+              <h3 className="h5 fw-bold mb-2">Nothing is listed just yet.</h3>
+              <p className="mb-0">Check back soon for fresh experiences to book.</p>
             </div>
           ) : (
             <div className="row g-4">
@@ -118,7 +92,7 @@ const HomePage = () => {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
